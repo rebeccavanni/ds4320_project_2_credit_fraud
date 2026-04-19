@@ -1,6 +1,6 @@
 # DS 4320 Project 2: Credit Card Fraud Detector
 
-This project builds a secondary relational dataset from the MovieLens 25M dataset created by GroupLens Research from University of Minnesota. With the goal of helping recommend movies to new users of a streaming platform. Given a small survey about genre interest and no prior watch history, the model will recommend a rank list of the top 5 movies using tag genome relevance and aggregate rankings from 25 million people. This repository has a fully normalized relational schema, data pipeline, solution notebook, and press release. 
+This project builds a MongoDB dataset with the aim of detecting credit fraud. 
 
 **Name:** Rebecca Vanni
 
@@ -17,142 +17,139 @@ This project builds a secondary relational dataset from the MovieLens 25M datase
 
 ### General Problem:
 
-Recommending content (e.g. Netflix)
+Detecting credit card fraud.
 
 ### Specific Problem:
 
-User of netflix needs to engage and find something to watch. With a new user with no prior history (except for onboarding genre survey) of their genre preferences, can we recommend a ranked list of the top 5 movies by using both the ratings and relevance score of movies from the MovieLens 25m Dataset. 
+Detecting credit card fraud is very difficult because there is a severe class imbalance. However, if a credit card company fails to recognize fraud it is very costly and difficult to deal with. If they overpredict fraud then they risk turning valued customers away and potentially put them in risky situations. The challenge being given the amount, time, merhcant category, and behavior of cardholder is the transaction fraud and at what point does the company need to decline a transaction.   
 
 ### Rationale for Refinement:
 
-Recommending movies to users is relatively easy when you have past history on shows watched, ratings given, time spent in a specific genre. However it becomes more difficult when the user is new to the platform or a cold start. In this case the model needs to compile basic data, like a starting survey of genre interested and what all other people on the platform enjoy. The MovieLens 25m dataset comes buth user interaction data which can be used for collaborative filtering and a tag genome (precomputed matrix of tag relevance scores). The tag-genome will allows filtering based on the content of the movie. The added challenge of the cold start recommendation of 5 movies is imperative to Netflix. They must recommend something that pulls the new user in and begins the process. They can not just use collaborative filtering because there is no history. Additionally the model can not only recommend popular movies, must reason using expressed preferences.
+Credit card fraud costs hundreds of thousands of people their own money. User's expierence enjoyment and trust is eroded. They could face lengthy disputes and potential asset freezing. However, the company needs to protect themselves from fraud and ensure low expenditures. As time and access to technology has expanded, there has been a greater ened for detection services. Evolving fraud patterns create a need for a machine learning pipeline which can adapt to these changes.
 
 ### Motivation for Project:
 
-Netflix and other streaming platforms are in constant competition for users. Once on the platform, it is the goal of Netflix to find the user a show or movie which capitvates their attention. If users spend a long time searching for content, they will become frustrated and leave. Netflix's recommendation engine is imperative to its income. When the user is new the search engine is particularly important. If the user is unsatifised then they will cancel their subscription. The MovieLens dataset which was collected by GroupLens Reasearch Group has over 25 years of movies and ratings.
+Detecting credit card fraud is a very broad statement on a larger issue. There are many different approaches (real-time screening detection, post-hoc batch classification, etc) to detecting fraud. Building a secondary dataset which has proper provenance enables a combined approach. Through using MongoDB each document has cardholder context, merhcant attributes, and computed behavioral features in one single nexted record. Relational schema is unable to due as well. The refinement trades real-time complexity for depth of feature engineering and model interpretability.
 
 ### Headline of Press Release:
 
-**New Users recieve personalized suggestions with answer to only one question - Netflix recommends 5 movies you will love**
+**Credit card fraud deteced using machine-learning model which priortizes credit user**
 → [press_release.md](./press_release.md)
 
 ## Domain Exposition
 
 ### Terminology
 
-| Term / KPI | Definition | Type |
-|---|---|---|
-| Collaborative Filtering| Recomendation method used that predicts user's preferences based on the ratings of other similiar users | ML Method |
-| Content-Based Filtering | Recomendation method used that recommends thinsg what have similiar features to those a user has suggested interest in | ML Method |
-| Tag Genome | A dense matrix of relevance scores between 0 and 1 which indicate how strongly each movie exhibits preset features of interest (tags) | Dataset Feature |
-| Tag Relevance Score | A continous value between 0 and 1 which indicates how strongly a movie is associated with a particular tag | Feature |
-| Rating | A user's explicit 5-star evaluation of a movie (MovieLens allows half scores) | Target Variable |
-| Cosine Similarity | Metric used to find the similarity between two tag-genome profiles | Similarity Metric |
-| Top-5 Recommendation | The ranked output of a recommender system (5 movies the user will enjoy) | Output |
-| RMSE | Root Mean Squared Error — measures average prediction error for rating-based models | Evaluation Metric |
-| Implicit Feedback | Behavioral signals (views, clicks) as opposed to explicit ratings; not present in MovieLens but relevant context | Domain Term |
+| Term | Definition |
+|------|-----------|
+| **Fraud** | A transaction initiated without the cardholder's authorization, typically after card data theft or account compromise |
+| **Class imbalance** | A condition where one class (fraud) is vastly underrepresented relative to the other (legitimate), often 2% of records |
+| **PCA features** | Principal Component Analysis-transformed features; in the ULB dataset, V1–V28 are PCA projections of original (confidential) transaction features |
+| **False positive (FP)** | A legitimate transaction incorrectly flagged as fraud; results in customer friction and declined purchases |
+| **False negative (FN)** | A fraudulent transaction incorrectly classified as legitimate; results in financial loss |
+| **Precision** | Of all transactions flagged as fraud, the fraction that are truly fraudulent: TP / (TP + FP) |
+| **Recall (Sensitivity)** | Of all actual fraud cases, the fraction correctly identified: TP / (TP + FN) |
+| **F1 Score** | Harmonic mean of precision and recall; preferred metric when class imbalance is severe |
+| **AUC-ROC** | Area Under the Receiver Operating Characteristic Curve; measures model discrimination ability across all classification thresholds |
+| **SMOTE** | Synthetic Minority Oversampling Technique; generates synthetic fraud samples to address class imbalance during training |
+| **Chargeback** | The reversal of a transaction initiated by the card issuer on behalf of the cardholder after fraud is confirmed |
+| **Authorization** | The real-time approval/denial decision made by the card network at point of sale |
+| **Transaction velocity** | The rate at which a cardholder makes purchases within a short time window; a common fraud signal |
+| **Merchant Category Code (MCC)** | A 4-digit code classifying the merchant type (e.g., grocery, airline, ATM); relevant to fraud profiling |
+| **Soft-schema document** | A MongoDB document without a rigidly enforced field structure, allowing variable fields across records |
 
 ### Project Domain
 
-This project lives in the streaming platform domain. Within that is is focused into the recommendation area. Recommender systems are a subfield of information filtering that seek to predict the preference a user would give to an item they have not yet encountered, and to rank candidate items accordingly. Within the broader landscape of recommender systems research, movie recommendation has served as the canonical benchmark domain since the Netflix Prize competition. Netflix has been at the forefront of recommendation services and through the MovieLens dataset we attempt to solve the problem of new users. This project's solution sits squarely in between recommendation based on past and inference, using the tag genome as a rich content feature space and aggregate rating statistics as a collaborative popularity. 
+This project lives at the intersection of financial technology and machine learning. Credit card fraud detection is one of the most well studied and talked about machine learning topics. Credit is the back bone of the economy, you need it to buy a house, start a business, and a car. Every person has a credit card, therefore every major card network (Visa, Mastercard, American Express) needs to have a mechanism agains't fraud. The domain is characterized by extreme class imbalance, where fewer than 2 in every 1,000 transactions are fraudulent, meaning naive classifiers achieve high accuracy by simply predicting not fruad for everything. So in order to create a model which is actually effective then they employ resampling strategies such as SMOTE. MongoDB's flexible schema allows each transaction document to carry nested cardholder history and merchant context alongside the core transaction fields, mirroring the structure of production fraud scoring systems.
 
 ### Background Reading:
 
-Readings are linked [here]([https://myuva-my.sharepoint.com/:f:/g/personal/ecn2wh_virginia_edu/IgA9ZguJMmhsRI5pEXVOEl3LAZx3wsYaePkO5Oyb9hZjxnI?e=zhi7z6](https://myuva-my.sharepoint.com/:f:/g/personal/ecn2wh_virginia_edu/IgA9ZguJMmhsRI5pEXVOEl3LAQqIJn5mLbPQUKsEjolq94M?e=6jW6BZ))
-
-| # | Title | Brief Description | Link |
-|---|---|---|---|
-| R1 | How Netflix’s Recommendations System Works | Broad background from Netflix on what they use to create their recommendations (users interactions, platform wide interaction, and information about item, like title or genre) and their current aproach to new user problem. | [link](https://myuva-my.sharepoint.com/:i:/g/personal/ecn2wh_virginia_edu/IQCjgCWgY9idRbA23qiyJTyOASHDuZojDEy4y1GDo6Bh8Wg?e=PWXMbW) |
-| R2 | MovieLens 25M Dataset Summary | Readme from the Movielens dataset. Includes the copy right, description of variables, and explanation on the calculated variables.Good to understand origin of data | [link](https://myuva-my.sharepoint.com/:b:/g/personal/ecn2wh_virginia_edu/IQD5ohAdQateSYCmcrQY6F74AVCCVWcpZnZqfjUv58uv5wQ?e=2ohaZA) |
-| R3 | Movie Recommender Systems: Concepts, Methods, Challenges, and Future Directions | Literature review on the current recommendations used by streaming platforms. Highlighting the filtering methods, machine-learning algorithims, and basic preformanc metrics. Also provides insights into what the future of recommendation algorithims will look liked. | [link](https://myuva-my.sharepoint.com/:b:/g/personal/ecn2wh_virginia_edu/IQASZWr1EL88T6bkvqmUlyyzAXQbUmJJMMFCFXCxNXGWTL4?e=dHghgv)
-| R4 | The Cold Start Problem for Recommender Systems | Blog on the cold start problem, explains why it is so hard to recommend items to new users. Goes through the basic problem, some of its nuances (identifying new users, returning users, etc), and provides a solution via use survey and popularity data. | [link](https://myuva-my.sharepoint.com/:b:/g/personal/ecn2wh_virginia_edu/IQDje5lhoSbeQZBvPKTWrveOAZ1T_hd6xQjgwGjbw48JFU0?e=7PsDiL)
-| R5 | An Introduction to Movie Genres | Blog explaining how a film is placed into a genre and a summary of the genre types (Action, Drama, Comedy, etc). Explains why a genre is relevant to movie. | [link](https://myuva-my.sharepoint.com/:b:/g/personal/ecn2wh_virginia_edu/IQD14qOusX5LTo_AX0qSVgy_AQqTqq8JNmmV8FXwsqaGBo0?e=mR3kNR) |
+| Title | Description | Link |
+|-------|-------------|------|
+| A supervised machine learning algorithm for detecting and predicting fraud in credit card transactions | Article on machine learning and detection: Random forest is the most suitable model for predicting fraudulent transactions. | [link](https://www.sciencedirect.com/science/article/pii/S2772662223000036) |
+| Fraud Fact and Statistics | Information on who is a victim of fraud most often: People older then 60. Important features to look at. | [link](https://www.johnmarshallbank.com/resources/security-center/fraud-facts-and-statistics/) |
+| Investment Fraud Dominates Losses – FBI IC3 and Europol IOCTA Insights | Explains how fraud has changed overtime and what fraud scams look like right now | [link](https://www.threatfabric.com/blogs/fraud-year-in-review-what-2025-taught-us-for-2026) |
+| AI fraud detection in banking | Article from IBM on how AI can be used in fraud detection, using credit large datasets and machine learning model | [link](https://www.ibm.com/think/topics/ai-fraud-detection-in-banking) |
+| Fraud in Noncash Payments | Government report quantifying the scale of payment card fraud in the U.S.; provides real-world motivation | [link](https://www.kansascityfed.org/research/payments-system-research-briefings/new-data-on-card-present-and-card-not-present-fraud-rates-in-the-united-states/) |
 
 ## Data Creation 
 
 ### Provenance
 
-The raw data for this Project comes from the MovieLens 25M dataset. This data was published by GroupLens Research at the University of Minnesota. It can be downloaded online, from the GroupLens website and it a compressed archive. Once downloaded the data will be contained in a folder. Within the folder there is six CVS files: movies.csv, ratings.cvs, tags.csv, links.csv, genome-scores.csv, genome-tags.csv. Within the files there are 25 millions ratings submited by 162,541 users on 62,423 movies between Jan.1995 adn Nov.2019. The genome file was created by MovieLens using a machine learning model trained on user-submitted tags, ratings, and review text. The model assigns a tag to a movie based on the relevance of its other tags, ratings, and movie title.
-
-In order to create the secondary dataset, I did transformed the raw files. I needed to calculate the per-movie aggregate stats (from ratings file). Additonally created minimum threshold of 50 ratings per movie to ensure movies with not enough information wouldnt mess with the model. The genome-score file and genome-tags were joined on genre-relevant tags which producted a content-feature vector per movie. Then from there joined the movie metadata with teh rating statistics, and genome score. Which created the relational structure to be used for cold-starts.
+The raw data source for this project is the ULB Credit Card Fraud Detection dataset published by researchers from the Université Libre de Bruxelles. Within the dataset there are 284,807 real transactions made on a credit card by European cardholders over two days in September 2013. Of the 200,000+ transactions, there are 492 fraud transactions (which accounts for .172%). Features V1-V28 are transformed to protect the identity of the credit cardholder whereas Time, Amount, and Class (fraud or not) are kept the same. To construct a secondary dataset from this point, each raw row was enriched and reshaped into a MongoDB document. The features were joined on cardholder attributes (account age, historical spend velocity) and merchant attributes (geographic region, merchant code). This enrichment step was performed programmatically in Python prior to ingestion. Which creates a nested structure.
 
 ### Code Table
 
-
 | File | Description | Link |
-|---|---|---|
-| pipeline/project1_ds_solution | Loads raw MovieLens CSVs computes per-movie avg rating and count, filters out by threshold (50), parses genres, and saves into clean files (movies_clean and raggtings_agg) | [link](https://github.com/rebeccavanni/DS_4320_Project_1_Netflix/blob/main/pipeline/project1_ds_solution.ipynb) |
+|------|-------------|------|
+| `ingest.py` | Downloads the raw Kaggle CSV, validates schema, and outputs a cleaned dataframe | [link](#) |
+| `enrich.py` | Joins synthetic cardholder and merchant attributes to each transaction row | [link](#) |
+| `load_mongo.py` | Transforms enriched rows into nested MongoDB documents and bulk-inserts into Atlas | [link](#) |
+per file, with a brief description and link to code in repo
 
 ### Bias identification
 
-Areas for bias in the MovieLens dataset include: Self-selection bias where only users who actively rate movies are represented on platform. Which means passive viewers are absent from the sample, and only self-motivated users are included which doesn't represent the population. Popularity bias, where heavily watched movies accumulate many more ratings than niche films. Which makes aggregate stats higher for the block-busters than smaller films. There is also temporal and demographic bias. The dataset spans 25 years during this time rating behavior and trends have changed vastly. Additionally older movies have longer to accumulate ratings. Demography was not verified when the dataset was created. So the dataset will likely be skewed to younger, english speaking, and technically literate individuals.
+The dataset contains potential bias from two sources the geographic location and time window of data collection. As the data is collected over 48 hours and in a european region, it would not be good at generalizing to other regions or time periods. For example, holiday time periods or spending habits based on card network are not represented. Additionally, the PCA tranformation is necessary but obscures the original features. You are unable to tell if attributes like age or geography were encoded in the components.
 
 ### Bias mitigation
 
-Popularity bias can be mitigated by using the Bayesian average or a credibility weighted mean. It will shrink the movie's estimated rating towards the global mean, so movies with few ratings won't out rank movies with many. Creating a threshold to remove movies with less than 50 rankings will also prevent bias from statistically unreliable movies. Temporal bias can be partially fixed by a recent weight to account for movies which haven't had enough time to accumulate as many ratings. Can't eliminate the demographic bias, but using the tag-genome is not user dependent as it is from content, so it will be used for the cold-start situation where the user is unknown.
+The class imbalance bias is addressed during model training by synthetically oversampling the minority (fraud) class rather than simply upsampling it. Geographic and temporal bias are harder to mitigate because they are found during data creation. The scope of the dataset can't be changed but bias can be quanified by tracking model performance degradation whne tested on held out time windows. Preventing overfit to narrow two day distribution.
 
 ### Rationale for key decisions
 
-Threshold of 50 ratings: a threshold was needed to balance the reliability of low rating movies. If the movie is too low (5 ratings) in ratings then it creates noise in the dataset and if it is too high then it excludes a large fraction from the catalog. 50 ratings will remove the outliers while maintaining older and niche titles.
-
-
-Genre to tag mapping: MovieLens had genre labels like Action and drama. These are very broad, but the tag genome contains 1128 fine-grained semantic tags. By mapping the tags to genre (using highest-relevance tags per genre and genre keywords) the user's survey response can provide broader aid. Can be seen based on what genres they like to then understand what in a movie they want to see.
-
-
-The final ranking combines a content-based cosine similarity score with a Bayesian-weighted aggregate rating at 50/50. This is the largest single source of modeling uncertainty. Shifting weight toward collaborative ratings increases popularity bias while shifting toward genome similarity surfaces more niche films. This parameter is explicitly tunable and flagged for sensitivity analysis.
+Several judgment calls introduce meaningful uncertainty. First, the choice to enrich with synthetic cardholder attributes preserves privacy but means the behavioral features (transaction velocity, avg.spend) are modeled approximations. This could inflate model performance artificially. Second, the decision to use SMOTE rather than class weight adjustment trades interpretability for balance. SMOTE generated synthetic fraud samples may not reflect real fraud patterns, potentially overfitting. Third, storing documents with nested merchant and cardholder sub-documents in MongoDB introduces schema flexibility but also inconsistency risk. Some fields like merchant.mcc may be missing for certain synthetic records, which must be handled explicitly in the pipeline with default values rather than rejected outright.
 
 ## Metadata
 
-### ER diagram
+### Implicit Schema Guidelines
 
-![erd_hw8.drawio.png](./data/erd_hw8.drawio.png)
+Each of the documents in the transactions collection for this project must contain the following fields:
+
+| Field | Type | Requirement |
+|-------|------|-------------|
+| `transaction_id` | string | Required |
+| `amount` | float | Required |
+| `time` | int | Required |
+| `class` | int (0 or 1) | Required |
+| `pca_features` | object (keys V1–V28) | Required |
+
+Documents are recommended to contian a cardholder sub-document which has the account_age_days, avg_monthly_spend, and velocity. Documents may also contian a merchant sub-document where the MCC, region, and merchant_id are all found. Optional fields are permitted but must not conflict with required field names. All monetary values are stored in USD as floats rounded to two decimal places.
+
+
 
 ### Data table
 
-| Table | Description | Link to CSV |
-|---|---|---|
-| movies_clean.csv | Movie metadata: movieId, title, genres (pipe-delimited); filtered to movies with ≥50 ratings | [movies.csv](https://myuva-my.sharepoint.com/:x:/g/personal/ecn2wh_virginia_edu/IQARLRHF1EdrSY64vkLu8doxASY409cDGU0Rp48BwU9ZdsE?e=mFO8Si) |
-| ratings_agg.csv | Per-movie aggregate statistics: avg_rating and rating_count; one row per movieId | [ratings_agg.csv](https://myuva-my.sharepoint.com/:x:/g/personal/ecn2wh_virginia_edu/IQANrch5XAKxQLzSRZUjooB_AT6U0oCgPvDZ5TLK64V-Eak?e=BNL0r9) |
-| genome-scores.csv | Tag relevance scores: one row per (movieId, tagId) pair with a continuous relevance score 0–1 | [genome-scores.csv](https://myuva-my.sharepoint.com/:x:/g/personal/ecn2wh_virginia_edu/IQDUbJgJWjqDTp73OukxyRF1AaxoOtRE5cxEnO9e84i3EBo?e=wNIcsP) |
-| genome-tags.csv | Tag label lookup: one row per tagId mapping to a human-readable tag string | [genome-tags.csv](https://myuva-my.sharepoint.com/:x:/g/personal/ecn2wh_virginia_edu/IQDBn1IsJoWtQqyXVBTxPO28AYxlXRFKs19QlZIau_ybmqI?e=rvDu8t) |
+| Property | Value |
+|----------|-------|
+| Collection | `transactions` |
+| Total documents | 284,807 |
+| Fraudulent (Class = 1) | 492 (0.172%) |
+| Legitimate (Class = 0) | 284,315 (99.828%) |
+| Date range | Sep 1–2, 2013 |
+| PCA features per document | 28 (V1–V28) |
 
 ### Data dictionary
 
-Movies:
-
-| Feature | Data Type | Description | Example |
-|---|---|---|---|
-| movieId | INTEGER | Unique movie identifier assigned by MovieLens | 1 |
-| title | VARCHAR | Full movie title including release year in parentheses | Toy Story (1995) |
-| genres | VARCHAR | Pipe-delimited genre labels assigned to the movie | Adventure\|Animation\|Children |
-
-Ratings Aggregated
-
-| Feature | Data Type | Description | Example |
-|---|---|---|---|
-| movieId | INTEGER | Foreign key referencing MOVIES.movieId | 1 |
-| avg_rating | FLOAT | Mean of all user ratings for this movie (scale 0.5–5.0) | 3.92 |
-| rating_count | INTEGER | Total number of user ratings submitted for this movie | 49695 |
-
-Genome Scores
-
-| Feature | Data Type | Description | Example |
-|---|---|---|---|
-| movieId | INTEGER | Foreign key referencing MOVIES.movieId | 1 |
-| tagId | INTEGER | Foreign key referencing GENOME_TAGS.tagId | 1 |
-| relevance | FLOAT | Continuous score 0–1 indicating how strongly the movie exhibits this tag | 0.029 |
-
-Genome Tags
-
-| Feature | Data Type | Description | Example |
-|---|---|---|---|
-| tagId | INTEGER | Unique tag identifier | 1 |
-| tag | VARCHAR | Human-readable semantic tag label | 007 |
+| Feature | Type | Description | Example |
+|---------|------|-------------|---------|
+| `transaction_id` | string | Unique document identifier | `"txn_00042"` |
+| `time` | int | Seconds elapsed since first transaction in dataset | `3600` |
+| `amount` | float | Transaction amount in USD | `149.62` |
+| `class` | int | Label: 0 = legitimate, 1 = fraud | `0` |
+| `V1`–`V28` | float | PCA-transformed confidential transaction features | `-1.3598` |
+| `cardholder.account_age_days` | int | Days since account was opened | `730` |
+| `cardholder.avg_monthly_spend` | float | Average monthly spend in USD | `842.50` |
+| `cardholder.velocity_7d` | int | Number of transactions in the past 7 days | `12` |
+| `merchant.mcc` | string | 4-digit Merchant Category Code | `"5411"` |
+| `merchant.region` | string | Geographic region of merchant | `"Western Europe"` |
+| `merchant.merchant_id` | string | Unique identifier for the merchant | `"merch_8821"` |
 
 ### Uncertainty quantification for numerical features
 
-| Feature | Table | Range | Mean | Std Dev | Source of Uncertainty |
-|---|---|---|---|---|---|
-| avg_rating | RATINGS_AGG | 0.5 – 5.0 | ~3.53 | ~0.52 | Computed mean of user ratings; movies with low rating_count have high variance — a movie with 50 ratings has a much wider confidence interval around its true mean than one with 50,000 |
-| rating_count | RATINGS_AGG | 50 – ~81,491 | ~1,200 | ~3,800 | Right-skewed; a few blockbusters dominate; the minimum threshold of 50 truncates the left tail but high variance remains |
-| relevance | GENOME_SCORES | 0.0 – 1.0 | ~0.07 | ~0.13 | Generated by a ML model trained on user tags and ratings — carries model uncertainty and is not a ground-truth label; scores near 0.5 are less reliable than those near 0 or 1 |
+| Feature | Min | Max | Mean | Std Dev | Uncertainty Note |
+|---------|-----|-----|------|---------|------------------|
+| `amount` | 0.00 | 25,691.16 | 88.35 | 250.12 | Right-skewed; large outliers may be legitimate high-value purchases or fraud |
+| `time` | 0 | 172,792 | 94,813 | 47,488 | Temporal bias: only 48 hours of data; time-of-day patterns may not generalize |
+| `V1`–`V28` | varies | varies | ~0 | ~1 | PCA-normalized; original scale and units unknown, limiting domain interpretation |
+| `cardholder.velocity_7d` | 0 | ~50 | synthetic | synthetic | Synthetically generated; does not reflect real cardholder behavior distributions |
+| `cardholder.account_age_days` | 0 | ~3650 | synthetic | synthetic | Synthetically generated; uniformly sampled, not drawn from real account-age distributions |
