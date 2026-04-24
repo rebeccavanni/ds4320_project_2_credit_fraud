@@ -12,3 +12,7 @@ Rather than a set of fixed rules, this project uses a trained classification mod
 The chart below illustrates one of the key signals the model relies on: fraudulent transactions tend to cluster at different amount ranges than legitimate ones. While most fraudulent charges are small, a meaningful tail of high-value fraud is also present. Small purchases because they are testing the card to see if it will decline.
 
 ![project2_pressrelease.png](/press_release/project2_pressrelease.png)
+
+The machine learning model that correctly caught 73 out of 95 fraud cases in testing, stopping the majority of fraudulent transactions before they could harm cardholders. At the same time, only 8 legitimate purchases were wrongly flagged, meaning customers will rarely experience an unnecessary declined transaction. The model analyzes patterns in each transaction to determine whether it looks suspicious, with certain behavioral signals proving far more telling than others. The result is a smarter, faster fraud detection system that protects your money without getting in the way of your everyday purchases.
+
+![project2_pressrelease.png](/press_release/fraud_results.png)
