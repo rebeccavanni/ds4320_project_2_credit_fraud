@@ -6,8 +6,7 @@ This project builds a MongoDB dataset with the aim of detecting credit fraud.
 
 **NetID:** ecn2wh
 
-**DOI:** [10.5281/zenodo.XXXXXXX](https://zenodo.org/records/19341763)
-
+**DOI:** 
 **Press Release:** → [press_release.md](/press_release/press_release.md)
 
 **Pipeline:** → [View Pipeline](pipeline/)
