@@ -8,9 +8,12 @@ This project builds a MongoDB dataset with the aim of detecting credit fraud.
 
 **DOI:** [10.5281/zenodo.XXXXXXX](https://zenodo.org/records/19341763)
 
+**Press Release:** → [press_release.md](/press_release/press_release.md)
+
+**Pipeline:** → [View Pipeline](pipeline/)
+
 **License:** [MIT License](./LICENSE)
 
-**Data Folder:** [Link](https://myuva-my.sharepoint.com/:f:/g/personal/ecn2wh_virginia_edu/IgD-dIiGiReqSp1NGoeO-pD0ASmBixDUYPq5ub-i4NudroA)
 
 
 ## Problem Definition 
