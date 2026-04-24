@@ -121,7 +121,7 @@ Documents are recommended to contian a cardholder sub-document which has the acc
 
 
 
-### Data table
+### Data Summary
 
 | Property | Value |
 |----------|-------|
