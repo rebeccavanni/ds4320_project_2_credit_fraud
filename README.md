@@ -88,7 +88,6 @@ The raw data source for this project is the ULB Credit Card Fraud Detection data
 | `ingest.py` | Downloads the raw Kaggle CSV, validates schema, and outputs a cleaned dataframe | [link](#) |
 | `enrich.py` | Joins synthetic cardholder and merchant attributes to each transaction row | [link](#) |
 | `load_mongo.py` | Transforms enriched rows into nested MongoDB documents and bulk-inserts into Atlas | [link](#) |
-per file, with a brief description and link to code in repo
 
 ### Bias identification
 
