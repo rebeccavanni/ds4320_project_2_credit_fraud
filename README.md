@@ -67,13 +67,15 @@ This project lives at the intersection of financial technology and machine learn
 
 ### Background Reading:
 
+Link to reading folder: [link](https://myuva-my.sharepoint.com/:f:/g/personal/ecn2wh_virginia_edu/IgCPaocQjqrJSLVDzM-1H6KyAYCdGd1BeT6eWIzVjZjreQ0?e=7oUsJS)
+
 | Title | Description | Link |
 |-------|-------------|------|
-| A supervised machine learning algorithm for detecting and predicting fraud in credit card transactions | Article on machine learning and detection: Random forest is the most suitable model for predicting fraudulent transactions. | [link](https://www.sciencedirect.com/science/article/pii/S2772662223000036) |
-| Fraud Fact and Statistics | Information on who is a victim of fraud most often: People older then 60. Important features to look at. | [link](https://www.johnmarshallbank.com/resources/security-center/fraud-facts-and-statistics/) |
-| Investment Fraud Dominates Losses – FBI IC3 and Europol IOCTA Insights | Explains how fraud has changed overtime and what fraud scams look like right now | [link](https://www.threatfabric.com/blogs/fraud-year-in-review-what-2025-taught-us-for-2026) |
-| AI fraud detection in banking | Article from IBM on how AI can be used in fraud detection, using credit large datasets and machine learning model | [link](https://www.ibm.com/think/topics/ai-fraud-detection-in-banking) |
-| Fraud in Noncash Payments | Government report quantifying the scale of payment card fraud in the U.S.; provides real-world motivation | [link](https://www.kansascityfed.org/research/payments-system-research-briefings/new-data-on-card-present-and-card-not-present-fraud-rates-in-the-united-states/) |
+| A supervised machine learning algorithm for detecting and predicting fraud in credit card transactions | Article on machine learning and detection: Random forest is the most suitable model for predicting fraudulent transactions. | [link](https://myuva-my.sharepoint.com/:u:/g/personal/ecn2wh_virginia_edu/IQCYkZBHiFlPS4coLc6EXedcAVGJoDOFORsELGzbYP2QLAc?e=p8i1eW) |
+| Fraud Fact and Statistics | Information on who is a victim of fraud most often: People older then 60. Important features to look at. | [link](https://myuva-my.sharepoint.com/:u:/g/personal/ecn2wh_virginia_edu/IQCuXWD6tgg6Q5bnwqlUej1QAWg2f7ICEOd5rnNa8H7yB-U?e=AWlHhc) |
+| Investment Fraud Dominates Losses – FBI IC3 and Europol IOCTA Insights | Explains how fraud has changed overtime and what fraud scams look like right now | [link](https://myuva-my.sharepoint.com/:u:/g/personal/ecn2wh_virginia_edu/IQApxFvyihVlQLRIxQQKMwh3ASLqI4kq4ijnHsBmu4j-BcE?e=aveIQw) |
+| AI fraud detection in banking | Article from IBM on how AI can be used in fraud detection, using credit large datasets and machine learning model | [link](https://myuva-my.sharepoint.com/:u:/g/personal/ecn2wh_virginia_edu/IQAqelY07NPiRLF4fNZjMwSxAVJiQ8aDteCabi7aGYuy7G8?e=stFAKc) |
+| Fraud in Noncash Payments | Government report quantifying the scale of payment card fraud in the U.S.; provides real-world motivation | [link](https://myuva-my.sharepoint.com/:u:/g/personal/ecn2wh_virginia_edu/IQDY776ghDMjSKwQUMdqFcu9AS2SzieclsvSxi-Rp0BVTDA?e=i8N4R5) |
 
 ## Data Creation 
 
