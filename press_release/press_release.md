@@ -11,4 +11,4 @@ Rather than a set of fixed rules, this project uses a trained classification mod
 
 The chart below illustrates one of the key signals the model relies on: fraudulent transactions tend to cluster at different amount ranges than legitimate ones. While most fraudulent charges are small, a meaningful tail of high-value fraud is also present. Small purchases because they are testing the card to see if it will decline.
 
-![project2_pressrelease.png](press_release/project2_pressrelease.png)
+![project2_pressrelease.png](/press_release/project2_pressrelease.png)
