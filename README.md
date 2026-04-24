@@ -37,7 +37,7 @@ Detecting credit card fraud is a very broad statement on a larger issue. There a
 ### Headline of Press Release:
 
 **Credit card fraud deteced using machine-learning model which priortizes credit user**
-→ [press_release.md](./press_release.md)
+→ [press_release.md](/press_release/press_release.md)
 
 ## Domain Exposition
 
